@@ -1,0 +1,7 @@
+{
+  "name": "sda_sas_vue",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
