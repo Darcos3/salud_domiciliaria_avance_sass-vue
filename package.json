@@ -27,6 +27,7 @@
     "axios": "^1.6.2",
     "firebase": "^10.7.1",
     "ionicons": "^7.0.0",
+    "onesignal-cordova-plugin": "^5.0.4",
     "vue": "^3.3.0",
     "vue-router": "^4.2.0"
   },

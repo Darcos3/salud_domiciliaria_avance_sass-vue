@@ -39,7 +39,6 @@
 <script>
 import { IonImg, IonText, IonApp, IonContent, IonIcon, IonItem, IonLabel, IonList, IonMenu, IonMenuToggle, IonNote, IonRouterOutlet, IonSplitPane } from '@ionic/vue';
 import { ref } from 'vue';
-import { PushNotifications } from '@capacitor/push-notifications';
 
 import { Storage } from '@ionic/storage';
 import { bookmarkOutline, logOutOutline, settingsOutline } from 'ionicons/icons';
@@ -64,19 +63,6 @@ export default {
     this.setup();
     this.obtnerSesion();
     
-    let permStatus = await PushNotifications.checkPermissions();
-
-    if (permStatus.receive === 'prompt') {
-      permStatus = await PushNotifications.requestPermissions();
-    }
-
-    if (permStatus.receive !== 'granted') {
-      throw new Error('User denied permissions!');
-    }
-
-    await PushNotifications.register();
-
-    await PushNotifications.getDeliveredNotifications();
 
   },
   methods: {
@@ -85,14 +71,6 @@ export default {
 
       this.logo = 'img/logo.png';
       this.avancesas = 'img/as.png';
-
-      this.subscribe();
-    },
-
-    subscribe () {
-      FCM.subscribeTo({ topic: "sd" })
-          .then(() => alert(`subscribed to topic`))
-          .catch((err) => console.log(err));
     },
 
     async obtnerSesion() {
@@ -110,7 +88,6 @@ export default {
         }
       }
       else {
-        this.$router.push('/login', 'root');
       }
     },
 
