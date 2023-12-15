@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package com.salud.domiciliaria;
 
 import com.getcapacitor.BridgeActivity;
 

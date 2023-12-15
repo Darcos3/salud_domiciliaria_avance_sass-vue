@@ -9,7 +9,7 @@
             <div class="info">
               <ion-text class="ion-text-capitalize" color="dark">{{ usuario }}</ion-text><br>
               <ion-note v-if="tipo == '0'">Profesional</ion-note>
-              <ion-note v-if="tipo== '1'">Paciente</ion-note>
+              <ion-note v-if="tipo == '1'">Paciente</ion-note>
             </div>
 
             <ion-menu-toggle :auto-hide="false">
@@ -37,8 +37,10 @@
 </template>
 
 <script>
-import { IonApp, IonContent, IonIcon, IonItem, IonLabel, IonList, IonMenu, IonMenuToggle, IonNote, IonRouterOutlet, IonSplitPane } from '@ionic/vue';
+import { IonImg, IonText, IonApp, IonContent, IonIcon, IonItem, IonLabel, IonList, IonMenu, IonMenuToggle, IonNote, IonRouterOutlet, IonSplitPane } from '@ionic/vue';
 import { ref } from 'vue';
+import { PushNotifications } from '@capacitor/push-notifications';
+
 import { Storage } from '@ionic/storage';
 import { bookmarkOutline, logOutOutline, settingsOutline } from 'ionicons/icons';
 
@@ -46,7 +48,7 @@ const store = new Storage();
 
 export default {
   components: {
-    IonApp, IonContent, IonIcon, IonItem, IonLabel, IonList, IonMenu, IonMenuToggle, IonNote, IonRouterOutlet, IonSplitPane
+    IonImg, IonText, IonApp, IonContent, IonIcon, IonItem, IonLabel, IonList, IonMenu, IonMenuToggle, IonNote, IonRouterOutlet, IonSplitPane
   },
   data() {
     return {
@@ -54,21 +56,45 @@ export default {
       datos: {},
       tipo: null,
       usuario: null,
-      logo:null,
-      avancesas:null
+      logo: null,
+      avancesas: null,
     }
   },
-  mounted() {
+  async mounted() {
     this.setup();
     this.obtnerSesion();
+    
+    let permStatus = await PushNotifications.checkPermissions();
+
+    if (permStatus.receive === 'prompt') {
+      permStatus = await PushNotifications.requestPermissions();
+    }
+
+    if (permStatus.receive !== 'granted') {
+      throw new Error('User denied permissions!');
+    }
+
+    await PushNotifications.register();
+
+    await PushNotifications.getDeliveredNotifications();
+
   },
   methods: {
     async setup() {
       await store.create();
+
       this.logo = 'img/logo.png';
       this.avancesas = 'img/as.png';
+
+      this.subscribe();
     },
-    
+
+    subscribe () {
+      FCM.subscribeTo({ topic: "sd" })
+          .then(() => alert(`subscribed to topic`))
+          .catch((err) => console.log(err));
+    },
+
     async obtnerSesion() {
       this.datos.sesion = await store.get('session');
       this.tipo = this.datos.sesion.tipo;

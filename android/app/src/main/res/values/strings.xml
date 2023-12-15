@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">sda_sas_vue</string>
-    <string name="title_activity_main">sda_sas_vue</string>
-    <string name="package_name">io.ionic.starter</string>
-    <string name="custom_url_scheme">io.ionic.starter</string>
+    <string name="app_name">Salud Domiciliaria</string>
+    <string name="title_activity_main">Salud Domiciliaria</string>
+    <string name="package_name">com.salud.domiciliaria</string>
+    <string name="custom_url_scheme">com.salud.domiciliaria</string>
 </resources>

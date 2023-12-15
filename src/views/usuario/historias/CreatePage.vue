@@ -175,19 +175,14 @@ export default {
     },
 
     crear() {
-      // console.log(this.datos);
-
-      const config = {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      }
-      axios.post('http://sda_sas.test/api/apiCrearHistoria', this.datos, config)
+      axios.post('http://sda_sas.test/api/apiCrearHistoria', this.datos, {headers: { 'Content-Type': 'multipart/form-data' }})
         .then(response => {
           let resp = response;
           if (resp.data.status === true) {
             let message = 'Se ha creado una nueva historia';
             let color = 'success';
             this.toast(color, message)
-            this.$router.push('/historias', 'root');
+            // this.$router.push('/historias', 'root');
           }
           else {
             let message = 'No se ha podido crear la historia!';

@@ -75,7 +75,8 @@
           <ion-item lines="true">
             <ion-textarea v-model="datos.recomendaciones" required></ion-textarea>
           </ion-item><br>
-          <input type="file" accept="image/*;capture=camera"><br><br>
+          <ion-input type="file" accept="image/png;image/jpeg;capture=camera" @change="createImage"></ion-input><br><br>
+          
           <ion-button expand="block" fill="solid" shape="round" color="primary" @click="modificar" 
             :disabled="!datos.evolucion_final || !datos.inf_relevante || !datos.concepto_profesional || !datos.inf_antecedentes || !datos.recomendaciones">
             Actualizar historia
@@ -157,18 +158,21 @@ export default {
         .catch(error => console.log(error))
     },
 
-    async takePicture() {
-      let image = await Plugins.Camera.getPhoto({
-        quality: 90,
-        allowEditing: false,
-        resultType: CameraResultType.base64
-      });
-      console.log(image)
-      this.datos.currentImage = image;
+    createImage() {
+      let rawImg;
+      const file = document.querySelector('input[type=file]').files[0];
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        rawImg = reader.result;
+        // console.log(rawImg);
+        this.datos.imagen = rawImg;
+      }
+      reader.readAsDataURL(file);
     },
 
     modificar() {
-      axios.post('http://sda_sas.test/api/apiUpdateHistoria', this.datos)
+      axios.post('http://sda_sas.test/api/apiUpdateHistoria', this.datos, {headers: { 'Content-Type': 'multipart/form-data' }} )
         .then(response => {
           let resp = response;
           if (resp.data.status === true) {
